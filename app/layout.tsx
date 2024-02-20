@@ -9,6 +9,7 @@ import NavBar from "./NavBar";
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
+  fallback: ['Arial, sans-serif'],
 });
 
 export const metadata: Metadata = {
