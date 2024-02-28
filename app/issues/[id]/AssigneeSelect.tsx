@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+import toast,{Toaster} from "react-hot-toast";
 import { Issue, User } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
@@ -23,8 +24,13 @@ const AssigneeSelect = ({issue}:{issue:Issue}) => {
 
 
   return (
-    <Select.Root defaultValue={issue.assignedToUserId || ""} onValueChange={ (userId) => {
-       axios.patch(`/api/issues/${issue.id}`, { assignedToUserId: userId || null });
+    <>
+    <Select.Root defaultValue={issue.assignedToUserId || ""} onValueChange={ async (userId) => {
+      try {
+        await axios.patch(`/api/issues/${issue.id}`, { assignedToUserId: userId || null });
+      } catch (error) {
+        toast.error('Changes could not be saved.')
+      }
     }  }>
       <Select.Trigger aria-placeholder="Assign..." />
       <Select.Content>
@@ -39,6 +45,8 @@ const AssigneeSelect = ({issue}:{issue:Issue}) => {
         </Select.Group>
       </Select.Content>
     </Select.Root>
+    <Toaster />
+    </>
   );
 };
 
